@@ -10,6 +10,7 @@ USERNAME=$1
 APPNAME=$2
 DOMAIN=$3
 DB_PASSWORD=$(openssl rand -base64 12)
+echo "$DB_PASSWORD" > "/srv/$USERNAME/apps/$APPNAME/configs/db_password.txt"
 
 # Check if required parameters are provided
 if [ -z "$USERNAME" ] || [ -z "$APPNAME" ] || [ -z "$DOMAIN" ]; then
@@ -36,7 +37,7 @@ MYSQL_ROOT_PASSWORD=$(openssl rand -base64 12)
 DB_PREFIX=$(openssl rand -hex 8)
 DB_NAME="${DB_PREFIX}_${APPNAME}"
 sudo mysql -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;"
-sudo mysql -e "CREATE USER IF NOT EXISTS '$USERNAME'@'localhost' IDENTIFIED BY '$DB_PASSWORD';"
+sudo mysql -e "CREATE USER IF NOT EXISTS '$USERNAME'@'localhost' IDENTIFIED BY \"$DB_PASSWORD\";"
 sudo mysql -e "GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$USERNAME'@'localhost';"
 sudo mysql -e "FLUSH PRIVILEGES;"
 

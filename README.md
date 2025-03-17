@@ -65,6 +65,3 @@ This script deploys a new WordPress instance.
             └── configs/      # Server configs
 ```
 
-## License
-
-[TODO: Add license information]
