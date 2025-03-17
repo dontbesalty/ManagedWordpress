@@ -1,0 +1,30 @@
+{
+  "users": {
+    "wpuser1": {
+      "created": 1742198400,
+      "apps": {
+        "myblog": {
+          "domain": "blog.example.com",
+          "db_name": "a1b2c3d4_myblog",
+          "paths": {
+            "public_html": "/srv/wpuser1/apps/myblog/public_html",
+            "configs": "/srv/wpuser1/apps/myblog/configs"
+          }
+        }
+      }
+    },
+    "wpuser2": {
+      "created": 1742198500,
+      "apps": {
+        "businesssite": {
+          "domain": "company.example.com",
+          "db_name": "e5f6g7h8_businesssite",
+          "paths": {
+            "public_html": "/srv/wpuser2/apps/businesssite/public_html",
+            "configs": "/srv/wpuser2/apps/businesssite/configs"
+          }
+        }
+      }
+    }
+  }
+}
