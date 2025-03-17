@@ -9,7 +9,7 @@ set -e
 apt update
 
 # Install essential packages
-apt install -y nginx apache2 mariadb-server redis-server ufw certbot python3-certbot-nginx php8.3 php8.3-fpm php8.3-mysql php8.3-redis php8.3-gd php8.3-curl php8.3-mbstring php8.3-xml
+apt install -y nginx apache2 mariadb-server redis-server ufw certbot python3-certbot-nginx php8.3 php8.3-fpm php8.3-mysql php8.3-redis php8.3-gd php8.3-curl php8.3-mbstring php8.3-xml jq
 
 # Configure Nginx
 # Set worker processes

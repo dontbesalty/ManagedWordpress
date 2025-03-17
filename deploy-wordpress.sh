@@ -5,12 +5,52 @@
 # Exit immediately if a command exits with a non-zero status.
 set -e
 
+# Check if jq is installed and install it if it is not
+if ! command -v jq &> /dev/null
+then
+  sudo apt update && sudo apt install -y jq
+fi
+
 # Define variables
 USERNAME=$1
 APPNAME=$2
 DOMAIN=$3
 DB_PASSWORD=$(openssl rand -base64 12)
 echo "$DB_PASSWORD" > "/srv/$USERNAME/apps/$APPNAME/configs/db_password.txt"
+
+# Create appdata directory if it doesn't exist
+sudo mkdir -p /var/lib/appdata
+
+# Define appdata file
+APPDATA_FILE=/var/lib/appdata/users.json
+
+# Create the appdata file if it doesn't exist
+if [ ! -f "$APPDATA_FILE" ]; then
+  sudo touch "$APPDATA_FILE"
+  sudo chown root:root "$APPDATA_FILE"
+  sudo chmod 600 "$APPDATA_FILE"
+  echo '{"users": {}}' | sudo tee "$APPDATA_FILE" > /dev/null
+fi
+
+# Add user and app data to the appdata file
+USER_JSON=$(jq -n \
+  --arg username "$USERNAME" \
+  --arg appname "$APPNAME" \
+  --arg domain "$DOMAIN" \
+  --arg dbname "$DB_NAME" \
+  --arg public_html "/srv/$USERNAME/apps/$APPNAME/public_html" \
+  --arg configs "/srv/$USERNAME/apps/$APPNAME/configs" \
+  '{($username): {created: now, apps: {($appname): {domain: $domain, db_name: $dbname, paths: {public_html: $public_html, configs: $configs}}}}}'\
+)
+
+# Check if user exists, if not add user, otherwise update user
+if jq -e ".\"users\".\"$USERNAME\"" "$APPDATA_FILE" > /dev/null; then
+  # Update user
+  sudo jq ".\"users\".\"$USERNAME\".apps += $USER_JSON.\"$USERNAME\".apps" "$APPDATA_FILE" > /tmp/tmp.json && sudo mv /tmp/tmp.json "$APPDATA_FILE"
+else
+  # Add user
+  sudo jq ".users += $USER_JSON" "$APPDATA_FILE" > /tmp/tmp.json && sudo mv /tmp/tmp.json "$APPDATA_FILE"
+fi
 
 # Check if required parameters are provided
 if [ -z "$USERNAME" ] || [ -z "$APPNAME" ] || [ -z "$DOMAIN" ]; then
