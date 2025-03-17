@@ -9,7 +9,7 @@ set -e
 apt update
 
 # Install essential packages
-apt install -y nginx apache2 mariadb-server redis-server ufw certbot python3-certbot-nginx php8.3 php8.3-fpm php8.3-mysql php8.3-redis php8.3-gd php8.3-curl php8.3-mbstring php8.3-xml jq
+apt install -y nginx apache2 mariadb-server redis-server ufw certbot python3-certbot-nginx php8.3 php8.3-fpm php8.3-mysql php8.3-redis php8.3-gd php8.3-curl php8.3-mbstring php8.3-xml jq git
 
 # Configure Nginx
 # Set worker processes
@@ -63,9 +63,8 @@ apt install -y libapache2-mod-security2
 
 # Download OWASP Core Rule Set
 cd /tmp
-wget https://github.com/coreruleset/coreruleset/archive/refs/tags/v4.0.0.tar.gz
-tar -xvzf v4.0.0.tar.gz
-mv coreruleset-4.0.0 /etc/modsecurity/crs
+git clone https://github.com/coreruleset/coreruleset.git
+mv coreruleset /etc/modsecurity/crs
 
 # Configure ModSecurity
 cp /etc/modsecurity/crs/crs-setup.conf.example /etc/modsecurity/crs/crs-setup.conf
