@@ -51,9 +51,12 @@ mysql_secure_installation
 # No changes needed for basic Redis configuration
 
 # Configure UFW
-ufw allow OpenSSH
-ufw allow 'Nginx Full'
-ufw enable
+read -r -p "Enable and configure UFW firewall? (y/N) " ufw_enable
+if [[ "$ufw_enable" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
+  ufw allow OpenSSH
+  ufw allow 'Nginx Full'
+  ufw enable
+fi
 
 # Install ModSecurity and OWASP Core Rule Set
 apt install -y libapache2-mod-security2
