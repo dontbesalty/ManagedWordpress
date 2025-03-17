@@ -65,3 +65,24 @@ This script deploys a new WordPress instance.
             └── configs/      # Server configs
 ```
 
+## Debugging
+
+### Enabling ModSecurity Debug Logs
+
+To enable ModSecurity debug logs, follow these steps:
+
+1.  Open the ModSecurity configuration file: `/etc/apache2/mods-enabled/security2.conf`
+2.  Add the following lines to the file:
+
+```
+SecDebugLog /var/log/apache2/modsec_debug.log
+SecDebugLogLevel 9
+```
+
+3.  Restart Apache:
+
+```bash
+sudo systemctl restart apache2
+```
+
+Note: Debug logs can be verbose and may impact performance. Use them for troubleshooting purposes only.
